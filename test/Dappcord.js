@@ -16,6 +16,10 @@ describe("Dappcord", function () {
     // Deploy Contract
     const Dappcord = await ethers.getContractFactory("Dappcord");
     dappcord = await Dappcord.deploy(NAME, SYMBOL);
+
+    // Create channel
+    const transaction = await dappcord.connect(deployer).createChannel("general",tokens(1))
+    await transaction.wait()
   });
 
   describe("Deployment", function () {
@@ -37,4 +41,25 @@ describe("Dappcord", function () {
       expect(result).to.equal(deployer.address)
     })
   });
+
+  describe("Creating Channels", function () {
+    
+    it("Returns total channels", async () => {
+      // Fetch name of contract
+      const result = await dappcord.totalChannels()
+      expect(result).to.be.equal(1)
+    });
+
+    it("Returns channel attributes", async() =>{
+      const channel = await dappcord.getChannel(1)
+      expect(channel.id).to.be.equal(1)
+      expect(channel.name).to.be.equal("general")
+      expect(channel.cost).to.be.equal(tokens(1))
+    })
+
+    it("Only Owner creates channel", async() =>{
+      await expect(dappcord.connect(user).createChannel("general", tokens(1))).to.be.revertedWith("Not authorized");
+    })
+  });
+
 });
