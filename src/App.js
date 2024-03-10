@@ -20,8 +20,12 @@ const socket = io("ws://localhost:3030");
 function App() {
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
+
   const [dappcord, setDappcord] = useState(null);
   const [channels, setChannels] = useState([]);
+
+  const [currentChannel, setCurrentChannel] = useState(null)
+
 
   const loadBlockchainData = async () => {
     console.log("loading...");
@@ -42,8 +46,6 @@ function App() {
       channels.push(channel)
     }
     setChannels(channels)
-
-    console.log(channels)
   };
 
   useEffect(() => {
@@ -61,7 +63,14 @@ function App() {
 
       <main>
         <Servers />
-        <Channels />
+        <Channels
+          provider={provider}
+          account={account}
+          dappcord={dappcord}
+          channels={channels}
+          currentChannel={currentChannel}
+          setCurrentChannel={setCurrentChannel}
+        />
         <Messages />
       </main>
     </div>
