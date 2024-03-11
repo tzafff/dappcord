@@ -25,10 +25,17 @@ function App() {
   const [channels, setChannels] = useState([]);
 
   const [currentChannel, setCurrentChannel] = useState(null)
+  const [messages, setMessages] = useState([])
+
 
 
   const loadBlockchainData = async () => {
     console.log("loading...");
+
+    window.ethereum.on("accountsChanged", (accounts) => {
+      const newAccount = ethers.utils.getAddress(accounts[0]);
+      setAccount(newAccount);
+    });
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     setProvider(provider)
@@ -51,10 +58,24 @@ function App() {
   useEffect(() => {
     loadBlockchainData();
 
-    window.ethereum.on("accountsChanged", (accounts) => {
-      const newAccount = ethers.utils.getAddress(accounts[0]);
-      setAccount(newAccount);
-    });
+    socket.on("connect", () => {
+      socket.emit('get messages')
+    })
+    socket.on("new message", (messages) => {
+      setMessages(messages)
+    })
+    socket.on("get messages", (messages) => {
+      console.log(messages)
+      setMessages(messages)
+    })
+
+    return () => {
+      socket.off('connect')
+      socket.off('new message')
+      socket.off('get messages')
+    }
+
+    
   }, []);
 
   return (
@@ -71,7 +92,7 @@ function App() {
           currentChannel={currentChannel}
           setCurrentChannel={setCurrentChannel}
         />
-        <Messages />
+        <Messages account={account} messages={messages} currentChannel={currentChannel} />
       </main>
     </div>
   );
