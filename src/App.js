@@ -16,9 +16,11 @@ import config from "./config.json";
 
 // Socket
 
-const socket = io('https://express-back.vercel.app', {
+const socket = io('/', {
   withCredentials: true,
 });
+
+
 
 function App() {
   const [account, setAccount] = useState(null);
