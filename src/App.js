@@ -72,6 +72,10 @@ function App() {
       console.log(messages)
       setMessages(messages)
     })
+    
+    io.engine.on("connection_error", (err) => {
+      console.log(err);
+    });
 
     return () => {
       socket.off('connect')
