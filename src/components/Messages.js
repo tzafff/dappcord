@@ -7,7 +7,10 @@ import send from '../assets/send.svg'
 
 // Socket
 
-const socket = io('wss://express-back.vercel.app');
+const socket = io('https://express-back.vercel.app', {
+  withCredentials: true,
+});
+
 
 const Messages = ({ account, messages, currentChannel }) => {
 
