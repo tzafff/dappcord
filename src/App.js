@@ -18,6 +18,7 @@ import config from "./config.json";
 
 const socket = io('https://express-back.vercel.app', {
   withCredentials: true,
+  transports: ['websocket']
 });
 
 function App() {
