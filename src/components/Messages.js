@@ -6,7 +6,8 @@ import person from '../assets/person.svg'
 import send from '../assets/send.svg'
 
 // Socket
-const socket = io('ws://localhost:3030')
+
+const socket = io('wss://dappcord3.vercel.appalhost');
 
 const Messages = ({ account, messages, currentChannel }) => {
 

@@ -15,7 +15,8 @@ import Dappcord from "./abis/Dappcord.json";
 import config from "./config.json";
 
 // Socket
-const socket = io("ws://localhost:3030");
+const socket = io('wss://dappcord3.vercel.appalhost');
+
 
 function App() {
   const [account, setAccount] = useState(null);
