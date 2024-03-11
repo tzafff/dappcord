@@ -8,7 +8,6 @@ import send from '../assets/send.svg'
 // Socket
 
 const socket = io('https://express-back.vercel.app', {
-  transports: ['websocket'],
   withCredentials: true,
 });
 
