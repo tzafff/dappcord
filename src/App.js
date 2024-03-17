@@ -37,9 +37,23 @@ function App() {
   const loadBlockchainData = async () => {
     console.log("loading...");
 
-    window.ethereum.on("accountsChanged", (accounts) => {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    const account = ethers.utils.getAddress(accounts[0]);
+    setAccount(account);
+    localStorage.setItem("walletAccount", account);
+
+    // Refresh Account
+    window.ethereum.on("accountsChanged", async () => {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
       const newAccount = ethers.utils.getAddress(accounts[0]);
+      // Store the new account in localStorage
+      localStorage.setItem("walletAccount", newAccount);
       setAccount(newAccount);
+      console.log("Account updated:", newAccount); // Add this line
     });
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -84,11 +98,9 @@ function App() {
 
     
   }, []);
-
   return (
     <div>
       <Navigation account={account} setAccount={setAccount} />
-
       <main>
         <Servers />
         <Channels
